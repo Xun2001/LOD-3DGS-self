@@ -16,17 +16,17 @@ import os
 class GroupParams:
     pass
 
-class ParamGroup:
+class ParamGroup: # 父类用于 add_argument() 添加参数;并区分长短参数
     def __init__(self, parser: ArgumentParser, name : str, fill_none = False):
         group = parser.add_argument_group(name)
         for key, value in vars(self).items():
             shorthand = False
-            if key.startswith("_"):
+            if key.startswith("_"): # 判断是否为 _开头的参数
                 shorthand = True
                 key = key[1:]
             t = type(value)
             value = value if not fill_none else None 
-            if shorthand:
+            if shorthand: # 针对 _开头的参数，重写为短参数和完整参数
                 if t == bool:
                     group.add_argument("--" + key, ("-" + key[0:1]), default=value, action="store_true")
                 else:
@@ -44,7 +44,7 @@ class ParamGroup:
                 setattr(group, arg[0], arg[1])
         return group
 
-class ModelParams(ParamGroup): 
+class ModelParams(ParamGroup): # 在group_params中定义的参数中，_开头的参数会被认为是短参数，否则认为是长参数;且子类中不进行 add_argument()
     def __init__(self, parser, sentinel=False):
         self.sh_degree = 3
         self.use_lod = False

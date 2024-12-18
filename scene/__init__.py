@@ -34,7 +34,7 @@ class Scene:
         self.loaded_iter = None
         self.level = 0
         
-        if os.path.exists(os.path.join(self.model_path, "point_cloud")):
+        if os.path.exists(os.path.join(self.model_path, "point_cloud")):#point_cloud是输出结果
             if load_iteration == -1:
                 self.loaded_iter = searchForMaxIteration(os.path.join(self.model_path, "point_cloud"))
             else:
